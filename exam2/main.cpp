@@ -125,69 +125,27 @@ void data_thread(){
    FXOS8700CQ_readRegs(FXOS8700Q_WHOAMI, &who_am_i, 1);
 
 
-//    pc.printf("Here is %x\r\n", who_am_i);
-
    while (true) {
-
-
       FXOS8700CQ_readRegs(FXOS8700Q_OUT_X_MSB, res, 6);
-
-
       acc16 = (res[0] << 6) | (res[1] >> 2);
-
       if (acc16 > UINT14_MAX/2)
-
          acc16 -= UINT14_MAX;
-
       t[0] = ((float)acc16) / 4096.0f;
-
       acc16 = (res[2] << 6) | (res[3] >> 2);
-
       if (acc16 > UINT14_MAX/2)
-
          acc16 -= UINT14_MAX;
-
       t[1] = ((float)acc16) / 4096.0f;
-
       acc16 = (res[4] << 6) | (res[5] >> 2);
-
       if (acc16 > UINT14_MAX/2)
-
          acc16 -= UINT14_MAX;
-
       t[2] = ((float)acc16) / 4096.0f;
-
-    //   printf("FXOS8700Q ACC: X=%1.4f(%x%x) Y=%1.4f(%x%x) Z=%1.4f(%x%x)\r\n",\
-    //         t[0], res[0], res[1],\
-    //         t[1], res[2], res[3],\
-    //         t[2], res[4], res[5]\
-    //   );
-
-      // printf("%1.4f\n%1.4f\n%1.4f\n",\
-      //       t[0],\
-      //       t[1],\
-      //       t[2]\
-      // );
-      
-    //   queue.call_every(1000 , printf , "oh\n");
       
       wait(0.1);
 
       if(wait_time > 0 && wait_time < 100){
-        
-        // data_x[wait_time] = t[0];
         data_y[wait_time] = t[1];
-        // data_z[wait_time] = t[2];
 
-        // if(t[1]<0){
-            distance = distance + ((t[1]+9.8)*0.01)/2 ;
-        // }
-        // else{
-        //     distance = distance + (t[1]*9.8);
-        // }
-         
-        // pc.printf("%f\n",distance);
-
+         distance = distance + ((t[1]+9.8)*0.01)/2 ;
 
         if(distance > 5){
             log[wait_time] = 1;
@@ -205,14 +163,6 @@ void data_thread(){
       if(flag == 1){
         wait_time = wait_time + 1;          
       }
-
-
-      // if(wait_time < 100){
-      //   printf("time : %d\n",wait_time);          
-      //   printf("%d\n",log);
-      // }
-
-    
    }   
 }
 
@@ -227,20 +177,12 @@ int main() {
     thread2.start(button_thread);
 }
 
-
 void FXOS8700CQ_readRegs(int addr, uint8_t * data, int len) {
-
    char t = addr;
-
    i2c.write(m_addr, &t, 1, true);
-
    i2c.read(m_addr, (char *)data, len);
-
 }
 
-
 void FXOS8700CQ_writeRegs(uint8_t * data, int len) {
-
    i2c.write(m_addr, (char *)data, len);
-
 }
