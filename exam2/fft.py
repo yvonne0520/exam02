@@ -1,13 +1,8 @@
 import matplotlib.pyplot as plt
-
 import numpy as np
-
 import serial
-
 import time
-
 t = np.arange(0,100,1)
-
 
 # x = np.arange(-1,1,0.02)
 y = np.arange(0,5,0.05)
